@@ -1,0 +1,44 @@
+version: "3.8"
+services:
+  db:
+    image: 'postgres:14.1-alpine'
+    environment:
+      - 'POSTGRES_DB=todo'
+      - 'POSTGRES_PASSWORD=secret'
+      - 'POSTGRES_USER=user'
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 500M
+        reservations:
+          cpus: '0.25'
+          memory: 100M
+      placement:
+        constraints:
+          - node.role == manager
+  todo:
+    image: ghcr.io/samitkumarpatel/todo:201020242046
+    restart: on-failure
+    depends_on:
+      - "db"
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 500M
+        reservations:
+          cpus: '0.25'
+          memory: 100M
+      placement:
+        constraints:
+          - node.role == manager
+    environment:
+      spring.datasource.url: 'jdbc:postgresql://db:5432/todo'
+      spring.datasource.username: 'user'
+      spring.datasource.password: 'secret'
+      spring.flyway.enabled: 'true'
+    ports:
+    - target: 8080
+      published: 8080
+      mode: host

@@ -1,0 +1,23 @@
+_format_version: "3.0"
+_transform: true
+
+services:
+  - name: nginx_service
+    host: nginx
+    port: 80
+    protocol: http
+    routes:
+    - name: nginx_route
+      paths:
+      - /nginx
+      strip_path: true
+  - name: todo_service
+    host: todo
+    port: 8080
+    protocol: http
+    routes:
+    - name: todo_api_route
+      paths:
+      - /todo
+      strip_path: true
+      
