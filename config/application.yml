@@ -1,0 +1,24 @@
+---
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: "nginx"
+          uri: http://nginx:80
+          predicates:
+            - Path=/nginx
+          filters:
+            - SetPath=/
+
+        - id: "todo-web"
+          uri: http://todo:8080
+          predicates:
+            - Path=/todo
+          filters:
+            - SetPath=/
+
+        - id: "todo"
+          uri: http://todo:8080
+          predicates:
+            - Path=/todo/**
+

@@ -1,26 +1,22 @@
 services:
   spring-cloud-gateway:
-    image: ghcr.io/samitkumarpatel/spring-cloud-gateway:main
+    image: ghcr.io/samitkumarpatel/spring-cloud-gateway:261020242024
     volumes:
-      - ./gateway-config:/usr/data
+      - ./config:/usr/config
     environment:
       - JAVA_TOOL_OPTIONS="-Dreactor.netty.http.server.accessLogEnabled=true"
-      - spring.config.location=/usr/data/
+      - spring.config.import=/usr/config/application.yml
     ports:
-      - target: 8080
-        published: 8000
+      - target: 9000
+        published: 9000
         mode: host
   
   nginx:
     image: nginx
-    # ports:
-    #   - target: 80
-    #     published: 80
-    #     mode: host
     volumes:
-      - ./index.html:/usr/share/nginx/html/index.html:ro
+      - ./html:/usr/share/nginx/html:ro
 
-  postgres-db:
+  db:
     image: 'postgres:14.1-alpine'
     environment:
       - 'POSTGRES_DB=todo'
@@ -39,7 +35,7 @@ services:
           - node.role == manager
 
   todo:
-    image: ghcr.io/samitkumarpatel/todo:201020242046
+    image: ghcr.io/samitkumarpatel/todo:261020242011
     restart: on-failure
     depends_on:
       - "db"
@@ -55,11 +51,7 @@ services:
         constraints:
           - node.role == manager
     environment:
-      spring.datasource.url: 'jdbc:postgresql://postgres-db:5432/todo'
+      spring.datasource.url: 'jdbc:postgresql://db:5432/todo'
       spring.datasource.username: 'user'
       spring.datasource.password: 'secret'
       spring.flyway.enabled: 'true'
-    # ports:
-    # - target: 8080
-    #   published: 8080
-    #   mode: host
