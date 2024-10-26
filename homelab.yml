@@ -26,6 +26,14 @@ services:
     image: nginx
     volumes:
       - ./html:/usr/share/nginx/html:ro
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 200M
+        reservations:
+          cpus: '0.25'
+          memory: 100M
 
   db:
     image: 'postgres:14.1-alpine'
