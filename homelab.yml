@@ -6,6 +6,17 @@ services:
     environment:
       - JAVA_TOOL_OPTIONS="-Dreactor.netty.http.server.accessLogEnabled=true"
       - spring.config.import=/usr/config/application.yml
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 500M
+        reservations:
+          cpus: '0.25'
+          memory: 100M
+      placement:
+        constraints:
+          - node.role == manager
     ports:
       - target: 9000
         published: 9000
