@@ -1,23 +1,27 @@
 _format_version: "3.0"
-_transform: true
-
 services:
-  - name: nginx_service
-    host: nginx
-    port: 80
-    protocol: http
+  - name: nginx-service
+    url: http://nginx:80
     routes:
-    - name: nginx_route
-      paths:
-      - /nginx
-      strip_path: true
-  - name: todo_service
-    host: todo
-    port: 8080
-    protocol: http
+      - name: nginx-route
+        paths:
+          - /nginx
+        strip_path: true
+
+  - name: todo-web-service
+    url: http://todo:8080
     routes:
-    - name: todo_api_route
-      paths:
-      - /todo
-      strip_path: true
+      - name: todo-web-route
+        paths:
+          - /todo
+        strip_path: true
+
+  - name: todo-service
+    url: http://todo:8080
+    routes:
+      - name: todo-route
+        paths:
+          - /todo/
+        strip_path: false
+
       
